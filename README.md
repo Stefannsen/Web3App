@@ -1,5 +1,5 @@
-# Web3App
-A web3 application for selling and trading nfts.
+# CrazyBearzz
+A web3 application for selling and trading nfts from CrazyBearzz Collection
 ## Install:
 1) terminal 1: `npm install`
 2) terminal 1: `npx hardhat node`
