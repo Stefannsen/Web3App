@@ -1,5 +1,11 @@
 # CrazyBearzz
 A web3 application for selling and trading nfts from CrazyBearzz Collection
+
+## About
+CrazyBearzz Collection consists of 101 NFTs that represent customized funny bears.
+In order to create these images, we created 6 custom layers in Photoshop. The layers were combined by using [this](https://github.com/rounakbanik/generative-art-nft) python script. We also generated json metadata files with this program.
+
+
 ## Install:
 1) terminal 1: `npm install`
 2) terminal 1: `npx hardhat node`
