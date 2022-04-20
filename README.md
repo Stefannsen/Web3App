@@ -3,7 +3,7 @@ A web3 application for selling and trading nfts from CrazyBearzz Collection
 
 ## About
 CrazyBearzz Collection consists of 101 NFTs that represent customized funny bears.
-In order to create these images, we created 6 custom layers in Photoshop. The layers were combined by using [this](https://github.com/rounakbanik/generative-art-nft) python script. We also generated json metadata files with this program.
+In order to create these images, we created 6 custom layers in Photoshop. The layers were combined by using [this](https://github.com/rounakbanik/generative-art-nft) python script. We also generated json metadata files with this program. The images and json files are uploaded on PinataCloud(IPFS).
 
 
 ## Install:
@@ -19,7 +19,7 @@ In order to create these images, we created 6 custom layers in Photoshop. The la
 3) Buy NFTs on market.
 4) Cancel a trade on market.
 
-## Functions
+## Solidity functions
 1) `setPrice(uint256 price) (onlyOwner)` - The owner can change the mint price.
 2) `setExcluded(address excluded, bool status) (onlyOwner)` - Add an address on white list.
 3) `safeMint(address to) (onlyOwner)` - The owner can mint a NFT for another account for free (except gas).
