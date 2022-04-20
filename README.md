@@ -8,10 +8,10 @@ In order to create these images, we created 6 custom layers in Photoshop. The la
 
 ## Install:
 1) terminal 1: `npm install`
-2) terminal 1: `npx hardhat node`
-3) terminal 2: `npx hardhat compile`
-4) terminal 2: `npx hardhat run scripts/deploy.js --network localhost`
-5) terminal 3: `npm run dev`
+2) terminal 1: `npx hardhat node` - to create a local blockchain
+3) terminal 2: `npx hardhat compile` - compile the solidity smart contract 
+4) terminal 2: `npx hardhat run scripts/deploy.js --network localhost` - deploy the smart contract
+5) terminal 3: `npm run dev` - start frontend
 
 ## Features
 1) Mint NFTs on blockchain for a price + gas fee.
