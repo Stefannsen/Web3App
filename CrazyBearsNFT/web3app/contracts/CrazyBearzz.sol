@@ -19,7 +19,7 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
         address poster;
         uint256 item;
         uint256 price;
-        bytes32 status; // Open, Executed, Cancelled
+        bytes32 status;
     }
 
     mapping(uint256 => Trade) public trades;
@@ -36,55 +36,32 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
 
     constructor() ERC721("CrazyBearzz", "CB") {}
 
+    // set price
     function setPrice(uint256 _price) public onlyOwner{
         PRICE = _price;
     }
 
+    // set the excluded list
     function setExcluded(address excluded, bool status) public onlyOwner {
         require(msg.sender == address(this), "owner only");
         excludedList[excluded] = status;
         excludedCounter = excludedCounter + 1;
     }
 
+    // safeMint for owner
     function safeMint(address to) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
     }
 
-    // The following functions are overrides required by Solidity.
-
-    function _burn(uint256 tokenId) internal override(ERC721) {
-        super._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
-    }
-
-
     function isContentOwned(string memory uri) public view returns (bool) {
         return existingURIs[uri] == 1;
     }
 
-    function payToMint(address recipient, string memory metadataURI)
+    function payToMint(string memory metadataURI)
      public payable returns (uint256) {
-         /*
-        require(existingURIs[metadataURI] != 1, "NFT already minted!");
-        require (msg.value >= 0.05 ether, "Need to pay up!");
 
-        uint256 newItemId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        existingURIs[metadataURI] = 1;
-        // _safeMint
-        _mint(recipient, newItemId);
-        //_setTokenURI(newItemId, metadataURI);
-*/      
         if(excludedList[msg.sender] == false) // sender not in excludedList 
             require(msg.value >= PRICE, "Pay up!");
 
@@ -112,14 +89,6 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
         return tokensId;
     }
 
-    function withdraw() public payable onlyOwner {
-        uint balance = address(this).balance;
-        require(balance > 0, "No ether left to withdraw");
-
-        (bool success, ) = (msg.sender).call{value: balance}("");
-        require(success, "Transfer failed.");
-    }
-
     function getActiveTrades() external view returns (Trade[] memory){
         uint currentIndex = 0;
         // count opened trades
@@ -142,12 +111,12 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
     }
 
     // sell
-    function openTrade(uint256 _item, uint256 _price)
+    function sellTrade(uint256 _item, uint256 _price)
     public
     {
         require(_exists(_item), "Token ID not available");
         require(msg.sender == ownerOf(_item), "Not owner of this token");
-        require(_price > 0, "Price zero");
+        require(_price > 0, "Pay up!");
 
         // check if token is already on sale
         for (uint i = 0; i < tradeCounter; i++) {
@@ -155,9 +124,8 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
                 require(false, "Token already on sale!");
             }
         }
-
+        // approve contarct to transfer token
         approve(address(this), _item);
-        //itemToken.transferFrom(msg.sender, address(this), _item);
         trades[tradeCounter] = Trade({
             index: tradeCounter,
             poster: msg.sender,
@@ -167,11 +135,10 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
         });
         tradeCounter += 1;
         onSale[_item] = true;
-        //emit TradeStatusChange(tradeCounter - 1, "Open");
     }
 
     // buy
-    function executeTrade(uint256 _trade)
+    function buyTrade(uint256 _trade)
     public
     payable
     {
@@ -179,12 +146,10 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
         require(trade.status == "Open", "Trade is not Open.");
         require(trade.poster != msg.sender, "No permission");
         require(msg.value >= trade.price, "Pay the price !!!");
-
+        // contract trasnfers token the buyer
         this.transferFrom(trade.poster, msg.sender, trade.item);
         payable(trade.poster).transfer(msg.value);
-        //transferFrom(trade.poster, msg.sender, trade.item);
-        trades[_trade].status = "Executed";
-        //emit TradeStatusChange(_trade, "Executed");
+        trades[_trade].status = "Finished";
         onSale[trade.item] = false;
     }
     
@@ -197,10 +162,8 @@ contract CrazyBearzz is ERC721Enumerable, Ownable {
             msg.sender == trade.poster,
             "No permission to cancel!"
         );
-        require(trade.status == "Open", "Trade is not Open.");
-        //itemToken.transferFrom(address(this), trade.poster, trade.item);
+        require(trade.status == "Open", "This trade is not available!.");
         trades[_trade].status = "Cancelled";
-        //emit TradeStatusChange(_trade, "Cancelled");
         onSale[trade.item] = false;
     }
 

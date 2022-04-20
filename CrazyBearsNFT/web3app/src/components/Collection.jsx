@@ -12,7 +12,7 @@ function Collection() {
 
   const openTrade = async (tokenId, price) => {
     try {
-      await contract.openTrade(tokenId, price);
+      await contract.sellTrade(tokenId, price);
       console.log("Trade published!");
     } catch (err) {
       console.log(err);

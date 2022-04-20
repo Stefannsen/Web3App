@@ -40,9 +40,7 @@ function Home() {
   return (
     <div className="container">
       <WalletBalance />
-      <GetNFTCollection />
-      <Transfer />
-      <Market contract={contract} signer={signer} />
+
       <div className="row">
         {Array(totalMinted + 1)
           .fill(0)
@@ -162,13 +160,13 @@ function NFTImage({ tokenId, getCount }) {
   const mintToken = async () => {
     const connection = contract.connect(signer);
     const addr = connection.address;
-    const result = await contract.payToMint(addr, metadataURI, {
+    const result = await contract.payToMint(metadataURI, {
       value: ethers.utils.parseEther("0.05"),
     });
 
     await result.wait();
     getMintedStatus();
-    getCount();
+    //getCount();
   };
 
   async function getURI() {

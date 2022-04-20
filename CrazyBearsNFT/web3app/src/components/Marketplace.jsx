@@ -22,7 +22,7 @@ function Marketplace() {
 
   const executeTrade = async (tr) => {
     try {
-      await contract.executeTrade(tr.index, {
+      await contract.buyTrade(tr.index, {
         value: ethers.utils.parseEther(parseInt(tr.price).toString()),
       });
       console.log("You bought the item!");

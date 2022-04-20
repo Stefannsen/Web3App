@@ -18,21 +18,21 @@ function Market() {
 
   const openTrade = async (tokenId, price) => {
     try {
-      await contract.openTrade(tokenId, price);
+      await contract.sellTrade(tokenId, price);
       console.log("Trade published!");
     } catch (err) {
       console.log(err);
     }
   };
 
-  const executeTrade = async (tradeId) => {
+  const executeTrade = async (tr) => {
     try {
       //await contract.executeTrade(tradeId);
 
       //const connection = contract.connect(signer);
       //const addr = connection.address;
-      await contract.executeTrade(tradeId, {
-        value: ethers.utils.parseEther("1"),
+      await contract.buyTrade(tradeId, {
+        value: ethers.utils.parseEther(parseInt(tr.price).toString),
       });
       console.log("You bought the item!");
     } catch (err) {
