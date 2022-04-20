@@ -1,5 +1,5 @@
 # CrazyBearzz
-A web3 application for selling and trading nfts from CrazyBearzz Collection
+A web3 application for selling and trading NFTs from the CrazyBearzz Collection.
 
 ## About
 CrazyBearzz Collection consists of 101 NFTs that represent customized funny bears.
